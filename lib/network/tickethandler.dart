@@ -4,14 +4,11 @@ import 'dart:convert';
 import 'package:http/http.dart' as http;
 import 'const.dart';
 
-Future<List<Ticket>> getTickets(String id) async {
+Future<List<Ticket>> getTicketsHandler(String id) async {
+  String request = 'http://' + ipAddr + ':81/customer/ticket/' + id + '/all';
 
-  String request = 'http://'+ipAddr+':81/customer/ticket/' + id + '/all';
+  final http.Response response = await http.get(request);
 
-  final http.Response response = await http.get(
-    request
-  );
-  
   if (response.statusCode != 404) {
     final parsed = jsonDecode(response.body).cast<Map<String, dynamic>>();
     return parsed.map<Ticket>((json) => Ticket.fromJson(json)).toList();
@@ -22,13 +19,10 @@ Future<List<Ticket>> getTickets(String id) async {
 }
 
 Future<List<Ticket>> getTicketsOperator(String id) async {
+  String request = 'http://' + ipAddr + ':81/operator/ticket/' + id + '/all';
 
-  String request = 'http://'+ipAddr+':81/operator/ticket/' + id + '/all';
+  final http.Response response = await http.get(request);
 
-  final http.Response response = await http.get(
-    request
-  );
-  
   if (response.statusCode != 404) {
     final parsed = jsonDecode(response.body).cast<Map<String, dynamic>>();
     return parsed.map<Ticket>((json) => Ticket.fromJson(json)).toList();
@@ -39,7 +33,7 @@ Future<List<Ticket>> getTicketsOperator(String id) async {
 }
 
 Future<Map> addTicketHandler(String req_body, String id) async {
-  String request = 'http://'+ipAddr+':81/customer/ticket/' + id + '/create';
+  String request = 'http://' + ipAddr + ':81/customer/ticket/' + id + '/create';
   final http.Response response = await http.post(
     request,
     headers: <String, String>{
@@ -54,8 +48,10 @@ Future<Map> addTicketHandler(String req_body, String id) async {
   }
 }
 
-Future<Map> updateTicketHandler(String req_body, String ticket ,String cus) async {
-  String request = 'http://'+ipAddr+':81/customer/ticket/' + cus + '/update/'+ticket;
+Future<Map> updateTicketHandler(
+    String req_body, String ticket, String cus) async {
+  String request =
+      'http://' + ipAddr + ':81/customer/ticket/' + cus + '/update/' + ticket;
   final http.Response response = await http.post(
     request,
     headers: <String, String>{
@@ -70,8 +66,9 @@ Future<Map> updateTicketHandler(String req_body, String ticket ,String cus) asyn
   }
 }
 
-Future<bool> deleteTicketHandler(String ticket ,String cus) async {
-  String request = 'http://'+ipAddr+':81/customer/ticket/' + cus + '/delete/'+ticket;
+Future<bool> deleteTicketHandler(String ticket, String cus) async {
+  String request =
+      'http://' + ipAddr + ':81/customer/ticket/' + cus + '/delete/' + ticket;
   final http.Response response = await http.get(
     request,
     headers: <String, String>{

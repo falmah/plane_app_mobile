@@ -14,24 +14,26 @@ class Request {
   String required_license;
   String required_visa;
   DateTime deadline;
-	int price;
+  int price;
   Ticket ticket;
   Plane plane;
   String request_comment;
 
-  Request(this.id,
-   this.status, 
-   this.operator,
-   this.pilot,
-   this.required_license,
-   this.required_visa,
-   this.deadline,
-   this.price,
-   this.ticket,
-   this.plane,
-   this.request_comment);
+  Request(
+      this.id,
+      this.status,
+      this.operator,
+      this.pilot,
+      this.required_license,
+      this.required_visa,
+      this.deadline,
+      this.price,
+      this.ticket,
+      this.plane,
+      this.request_comment);
 
-  factory Request.fromJson(Map<String, dynamic> json) => _$RequestFromJson(json);
+  factory Request.fromJson(Map<String, dynamic> json) =>
+      _$RequestFromJson(json);
 
   Map<String, dynamic> toJson() => _$RequestToJson(this);
 }

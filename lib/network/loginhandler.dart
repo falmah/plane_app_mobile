@@ -7,7 +7,7 @@ import 'package:http/http.dart' as http;
 
 Future<Map> loginHandler(String email, String password) async {
   final http.Response response = await http.post(
-    'http://'+ipAddr+':81/login',
+    'http://' + ipAddr + ':81/login',
     headers: <String, String>{
       'Content-Type': 'application/json; charset=UTF-8',
     },
@@ -25,7 +25,7 @@ Future<Map> loginHandler(String email, String password) async {
 
 Future<Map> registerHandler(String req_body) async {
   final http.Response response = await http.post(
-    'http://'+ipAddr+':81/register',
+    'http://' + ipAddr + ':81/register',
     headers: <String, String>{
       'Content-Type': 'application/json; charset=UTF-8',
     },

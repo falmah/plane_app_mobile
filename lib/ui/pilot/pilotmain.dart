@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:plane_app_mobile/ui/pilot/pilotlicenselist.dart';
 import '../../model/pilot.dart';
 import 'pilotrequestlist.dart';
 
@@ -55,31 +56,6 @@ class _PilotMainPage extends State<PilotMainPage> {
                   // Update the state of the app
                   // ...
                   // Then close the drawer
-                  Navigator.pop(context);
-                },
-              ),
-              ListTile(
-                leading: Icon(Icons.book),
-                title: Text('Licenses'),
-                onTap: () {
-                  //Navigator.pop(context);
-                  //Navigator.push(
-                  //  context,
-                  //  MaterialPageRoute(builder: (context) => OperatorTicketListPage(operator)));
-                },
-              ),
-              ListTile(
-                leading: Icon(Icons.art_track),
-                title: Text('Visas'),
-                onTap: () {
-                  Navigator.pop(context);
-                },
-              ),
-              ListTile(
-                leading: Icon(Icons.assignment_ind),
-                title: Text('Requests'),
-                onTap: () {
-                  Navigator.pop(context);
                 },
               ),
               ListTile(
@@ -89,7 +65,6 @@ class _PilotMainPage extends State<PilotMainPage> {
                   // Update the state of the app
                   // ...
                   // Then close the drawer
-                  Navigator.pop(context);
                 },
               ),
               ListTile(
@@ -119,9 +94,9 @@ class _PilotMainPage extends State<PilotMainPage> {
                   children: <Widget>[
                     GestureDetector (
                       onTap: () {
-                        //Navigator.push(
-                        //context,
-                        //MaterialPageRoute(builder: (context) => OperatorTicketListPage(operator)));
+                        Navigator.push(
+                        context,
+                        MaterialPageRoute(builder: (context) => PilotLicenseListPage(pilot)));
                       },
                       child: Container(
                         color: Colors.grey[700],

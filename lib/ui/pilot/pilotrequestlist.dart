@@ -16,6 +16,7 @@ class PilotRequestListPage extends StatefulWidget {
 class _PilotRequestListPage extends State<PilotRequestListPage> {
 
   Pilot pilot;
+  GlobalKey<RefreshIndicatorState> refreshKey;
 
   _PilotRequestListPage(this.pilot);
   List<Request> requestList = [];
@@ -24,6 +25,12 @@ class _PilotRequestListPage extends State<PilotRequestListPage> {
     return new List<Widget>.generate(requestList.length, (int index) {
       return RequestCard(requestList[index], pilot);
     });
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    refreshKey = GlobalKey<RefreshIndicatorState>();
   }
 
   @override
@@ -47,48 +54,57 @@ class _PilotRequestListPage extends State<PilotRequestListPage> {
             },
           ),
         ),
-        body: Padding(
+        body:  RefreshIndicator(
+          key: refreshKey,
+          onRefresh: () async {
+            var tmp = await getPilotRequests(pilot.id);
+            setState(() {
+              requestList = tmp;
+            });
+          }, 
+          child: Padding(
           padding: const EdgeInsets.all(16.0),
           child: FutureBuilder<List<Request>>(
-            future: getOperatorRequest(pilot.id),
+            future: getPilotRequests(pilot.id),
             builder: (BuildContext context, AsyncSnapshot<List<Request>> snapshot) {
-          List<Widget> children;
-          if (snapshot.hasData) {
-            requestList = snapshot.data;
-            children = _generateList();
-          } else if (snapshot.hasError) {
-            children = <Widget>[
-              Icon(
-                Icons.error_outline,
-                color: Colors.red,
-                size: 60,
-              ),
-              Padding(
-                padding: const EdgeInsets.only(top: 16),
-                child: Text('Error: ${snapshot.error}'),
-              )
-            ];
-          } else {
-            children = <Widget>[
-              SizedBox(
-                child: CircularProgressIndicator(),
-                width: 60,
-                height: 60,
-              ),
-              const Padding(
-                padding: EdgeInsets.only(top: 16),
-                child: Text('Awaiting result...'),
-              )
-            ];
-          }
-          return Column(
-              children: children,
-          );
-        },
+              List<Widget> children;
+              if (snapshot.hasData) {
+                requestList = snapshot.data;
+                children = _generateList();
+              } else if (snapshot.hasError) {
+                children = <Widget>[
+                  Icon(
+                    Icons.error_outline,
+                    color: Colors.red,
+                    size: 60,
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.only(top: 16),
+                    child: Text('Error: ${snapshot.error}'),
+                  )
+                ];
+              } else {
+                children = <Widget>[
+                  SizedBox(
+                    child: CircularProgressIndicator(),
+                    width: 60,
+                    height: 60,
+                  ),
+                  const Padding(
+                    padding: EdgeInsets.only(top: 16),
+                    child: Text('Awaiting result...'),
+                  )
+                ];
+              }
+              return Column(
+                  children: children,
+              );
+            },
+          ),
+        ),
+        backgroundColor: Colors.grey[850],
       ),
-    ),
-    backgroundColor: Colors.grey[850],
-    ),
+      ),
     );
   }
 }

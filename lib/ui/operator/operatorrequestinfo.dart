@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:plane_app_mobile/model/operator.dart';
-import 'package:plane_app_mobile/model/ticket.dart';
 import 'package:intl/intl.dart';
 import 'package:plane_app_mobile/model/request.dart';
+import 'operatorupdaterequest.dart';
 
 class OperatorRequestInfo extends StatefulWidget {
 
@@ -80,6 +80,7 @@ class _OperatorRequestInfo extends State<OperatorRequestInfo> {
                 ),
                 Row(
                   children: <Widget>[
+                    createInfo("To: "),
                     createInfo(request.ticket.dest_to.name),
                   ],
                 ),
@@ -148,17 +149,13 @@ class _OperatorRequestInfo extends State<OperatorRequestInfo> {
                         Align(
                           alignment: Alignment.bottomLeft,
                           child: MaterialButton(
-                            minWidth: 200,
-                            onPressed: () => {},
+                            minWidth: 400,
+                            onPressed: (){
+                                Navigator.push(
+                                context,
+                                MaterialPageRoute(builder: (context) => OperatorUpdateRequest(operator, request)));
+                            },
                             child: Text('Edit', style: TextStyle(fontSize: 30)),
-                          ),
-                        ),
-                        Align(
-                          alignment: Alignment.bottomRight,
-                          child: MaterialButton(
-                            minWidth: 200,
-                            onPressed: () => {},
-                            child: Text('Delete', style: TextStyle(fontSize: 30)),
                           ),
                         ),
                       ],

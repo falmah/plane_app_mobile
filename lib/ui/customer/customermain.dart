@@ -1,10 +1,9 @@
 import 'package:flutter/material.dart';
 import '../../model/customer.dart';
+import 'customerproposallist.dart';
 import 'cutomerticketlist.dart';
-import 'customeraddticket.dart';
 
 class CustomerMainPage extends StatefulWidget {
-
   Customer customer;
   CustomerMainPage(this.customer);
 
@@ -13,7 +12,6 @@ class CustomerMainPage extends StatefulWidget {
 }
 
 class _CustomerMainPage extends State<CustomerMainPage> {
-
   Customer customer;
   _CustomerMainPage(this.customer);
 
@@ -29,17 +27,17 @@ class _CustomerMainPage extends State<CustomerMainPage> {
       ),
       home: Scaffold(
         appBar: AppBar(
-          title: Text(customer.user.name), 
+          title: Text(customer.user.name),
           //backgroundColor: Colors.grey
-          ),
+        ),
         drawer: Drawer(
           child: ListView(
-          // Important: Remove any padding from the ListView.
+            // Important: Remove any padding from the ListView.
             padding: EdgeInsets.zero,
             children: <Widget>[
               DrawerHeader(
                 child: Text(
-                  customer.user.name+' profile',
+                  customer.user.name + ' profile',
                   style: TextStyle(
                     color: Colors.white,
                     fontSize: 26,
@@ -56,24 +54,6 @@ class _CustomerMainPage extends State<CustomerMainPage> {
                   // Update the state of the app
                   // ...
                   // Then close the drawer
-                  Navigator.pop(context);
-                },
-              ),
-              ListTile(
-                leading: Icon(Icons.airplanemode_active),
-                title: Text('My Tickets'),
-                onTap: () {
-                  Navigator.pop(context);
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(builder: (context) => CustomerTicketListPage(customer)));
-                },
-              ),
-              ListTile(
-                leading: Icon(Icons.announcement),
-                title: Text('Proposals'),
-                onTap: () {
-                  Navigator.pop(context);
                 },
               ),
               ListTile(
@@ -83,7 +63,6 @@ class _CustomerMainPage extends State<CustomerMainPage> {
                   // Update the state of the app
                   // ...
                   // Then close the drawer
-                  Navigator.pop(context);
                 },
               ),
               ListTile(
@@ -102,8 +81,8 @@ class _CustomerMainPage extends State<CustomerMainPage> {
         body: Padding(
           padding: const EdgeInsets.all(16.0),
           child: CustomScrollView(
-          primary: false,
-          slivers: <Widget>[
+            primary: false,
+            slivers: <Widget>[
               SliverPadding(
                 padding: const EdgeInsets.all(20),
                 sliver: SliverGrid.count(
@@ -111,44 +90,64 @@ class _CustomerMainPage extends State<CustomerMainPage> {
                   mainAxisSpacing: 10,
                   crossAxisCount: 2,
                   children: <Widget>[
-                    GestureDetector (
+                    GestureDetector(
                       onTap: () {
                         Navigator.push(
-                          context,
-                          MaterialPageRoute(builder: (context) => CustomerTicketListPage(customer)));
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) =>
+                                    CustomerTicketListPage(customer)));
                       },
                       child: Container(
                         color: Colors.grey[700],
                         padding: const EdgeInsets.all(8),
                         child: Center(
-                         child: Column(
+                          child: Column(
                             //padding: EdgeInsets.all(8),
-                            children: <Widget> [
+                            children: <Widget>[
                               Expanded(
-                                child: Text("Show tickets", style: TextStyle(fontSize: 20),),
+                                child: Text(
+                                  "Show tickets",
+                                  style: TextStyle(fontSize: 20),
+                                ),
                               ),
                               Expanded(
-                                child: Icon(Icons.airplanemode_active, size: 50,),
+                                child: Icon(
+                                  Icons.airplanemode_active,
+                                  size: 50,
+                                ),
                               ),
                             ],
                           ),
                         ),
                       ),
                     ),
-                    GestureDetector (
-                      onTap: () {print("TAP TAP");},
+                    GestureDetector(
+                      onTap: () {
+                        Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) =>
+                                    CustomerProposalListPage(customer)));
+                      },
                       child: Container(
                         color: Colors.grey[700],
                         padding: const EdgeInsets.all(8),
                         child: Center(
-                         child: Column(
+                          child: Column(
                             //padding: EdgeInsets.all(8),
-                            children: <Widget> [
+                            children: <Widget>[
                               Expanded(
-                                child: Text("Show proposals", style: TextStyle(fontSize: 20),),
+                                child: Text(
+                                  "Show proposals",
+                                  style: TextStyle(fontSize: 20),
+                                ),
                               ),
                               Expanded(
-                                child: Icon(Icons.announcement, size: 50,),
+                                child: Icon(
+                                  Icons.announcement,
+                                  size: 50,
+                                ),
                               ),
                             ],
                           ),

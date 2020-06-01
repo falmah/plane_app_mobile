@@ -9,6 +9,7 @@ class Customer {
 
   Customer(this.id, this.user);
 
-  factory Customer.fromJson(Map<String, dynamic> json) => _$CustomerFromJson(json);
+  factory Customer.fromJson(Map<String, dynamic> json) =>
+      _$CustomerFromJson(json);
   Map<String, dynamic> toJson() => _$CustomerToJson(this);
 }

@@ -1,10 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:plane_app_mobile/model/operator.dart';
 import 'package:plane_app_mobile/model/plane.dart';
-import 'package:plane_app_mobile/model/ticket.dart';
-import 'package:plane_app_mobile/model/plane.dart';
-import 'package:intl/intl.dart';
-import 'operatoraddrequest.dart';
+import 'operatorupdateplane.dart';
 
 class OperatorPlaneInfo extends StatefulWidget {
 
@@ -65,12 +62,16 @@ class _OperatorPlaneInfo extends State<OperatorPlaneInfo> {
                     createInfo(plane.registration_prefix), 
                   ],
                 ),
+                SizedBox(height: 48.0),
+                Divider(),
                 Row(
                   children: <Widget>[
                     createInfo("Registration id: "),
                     createInfo(plane.registration_id),
                   ],
                 ),
+                SizedBox(height: 48.0),
+                Divider(),
                 Row(
                   children: <Widget>[
                     createInfo("type: "),
@@ -86,17 +87,13 @@ class _OperatorPlaneInfo extends State<OperatorPlaneInfo> {
                         Align(
                           alignment: Alignment.bottomLeft,
                           child: MaterialButton(
-                            minWidth: 200,
-                            onPressed: () => {},
+                            minWidth: 400,
+                            onPressed: () {
+                              Navigator.push(
+                              context,
+                              MaterialPageRoute(builder: (context) => OperatorUpdatePlane(operator, plane)));
+                            },
                             child: Text('Edit', style: TextStyle(fontSize: 30)),
-                          ),
-                        ),
-                        Align(
-                          alignment: Alignment.bottomRight,
-                          child: MaterialButton(
-                            minWidth: 200,
-                            onPressed: () => {},
-                            child: Text('Delete', style: TextStyle(fontSize: 30)),
                           ),
                         ),
                       ],
@@ -107,8 +104,8 @@ class _OperatorPlaneInfo extends State<OperatorPlaneInfo> {
             ),
           )
         ),
-    backgroundColor: Colors.grey[850],
-    ),
+        backgroundColor: Colors.grey[850],
+      ),
     );
   }
 }

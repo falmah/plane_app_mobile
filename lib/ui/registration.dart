@@ -47,6 +47,7 @@ class _RegistrationPage extends State<RegistrationPage> {
     }
 
     var resp = await registerHandler(json.encode(req));
+    Navigator.pop(context);
     switch (resp["user"]["role"] as String) {
       case "customer": {
         Customer c = Customer.fromJson(resp);

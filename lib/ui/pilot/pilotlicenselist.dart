@@ -1,27 +1,30 @@
 import 'package:flutter/material.dart';
-import 'package:plane_app_mobile/model/ticket.dart';
-import 'package:plane_app_mobile/model/customer.dart';
-import 'customeraddticket.dart';
-import '../../model/customer.dart';
-import 'customerticketinfo.dart';
-import 'package:plane_app_mobile/network/tickethandler.dart';
+import 'package:plane_app_mobile/model/pilot.dart';
+import 'package:plane_app_mobile/network/licensehandler.dart';
+import 'package:plane_app_mobile/ui/pilot/pilotaddlicense.dart';
+import 'package:plane_app_mobile/ui/pilot/pilotlicenseinfo.dart';
+import 'package:plane_app_mobile/model/license.dart';
 
-class CustomerTicketListPage extends StatefulWidget {
-
-  Customer customer;
-  CustomerTicketListPage(this.customer);
+class PilotLicenseListPage extends StatefulWidget {
+  final Pilot pilot;
+  PilotLicenseListPage(this.pilot);
 
   @override
-  _CustomerTicketListPage createState() => _CustomerTicketListPage(customer);
+  _PilotLicenseListPage createState() => _PilotLicenseListPage(pilot);
 }
 
-class _CustomerTicketListPage extends State<CustomerTicketListPage> {
-
-  Customer customer;
-  List<Ticket> ticketList = [];
+class _PilotLicenseListPage extends State<PilotLicenseListPage> {
+  Pilot pilot;
   GlobalKey<RefreshIndicatorState> refreshKey;
 
-  _CustomerTicketListPage(this.customer);
+  _PilotLicenseListPage(this.pilot);
+  List<License> requestList = [];
+
+  List<Widget> _generateList() {
+    return new List<Widget>.generate(requestList.length, (int index) {
+      return LicenseCard(refreshKey, requestList[index], pilot);
+    });
+  }
 
   @override
   void initState() {
@@ -41,7 +44,7 @@ class _CustomerTicketListPage extends State<CustomerTicketListPage> {
       ),
       home: Scaffold(
         appBar: AppBar(
-          title: Text("Ticket list"),
+          title: Text(pilot.user.name),
           leading: IconButton(
             tooltip: 'Previous choice',
             icon: const Icon(Icons.arrow_back),
@@ -53,27 +56,23 @@ class _CustomerTicketListPage extends State<CustomerTicketListPage> {
         body: RefreshIndicator(
           key: refreshKey,
           onRefresh: () async {
-            var tmp = await getTicketsHandler(customer.id);
+            var tmp = await getPilotLicense(pilot.id);
             setState(() {
-              ticketList = tmp;  
+              requestList = tmp;
             });
-          }, 
+          },
           child: Padding(
             padding: const EdgeInsets.all(16.0),
-            child: FutureBuilder<List<Ticket>>(
-              future: getTicketsHandler(customer.id),
-              builder: (BuildContext context, AsyncSnapshot<List<Ticket>> snapshot) {
-                Widget child;
+            child: FutureBuilder<List<License>>(
+              future: getPilotLicense(pilot.id),
+              builder: (BuildContext context,
+                  AsyncSnapshot<List<License>> snapshot) {
+                List<Widget> children;
                 if (snapshot.hasData) {
-                  ticketList = snapshot.data;
-                  child = ListView.builder(
-                    itemCount: ticketList.length,
-                    itemBuilder: (BuildContext contex, int index){
-                      return TicketCard(refreshKey, ticketList[index], customer);
-                    },
-                  );
+                  requestList = snapshot.data;
+                  children = _generateList();
                 } else if (snapshot.hasError) {
-                  child = Column( children: <Widget>[
+                  children = <Widget>[
                     Icon(
                       Icons.error_outline,
                       color: Colors.red,
@@ -83,19 +82,23 @@ class _CustomerTicketListPage extends State<CustomerTicketListPage> {
                       padding: const EdgeInsets.only(top: 16),
                       child: Text('Error: ${snapshot.error}'),
                     )
-                  ],
-                  );
+                  ];
                 } else {
-                  child = Column( children: <Widget>[
-                    CircularProgressIndicator(),
+                  children = <Widget>[
+                    SizedBox(
+                      child: CircularProgressIndicator(),
+                      width: 60,
+                      height: 60,
+                    ),
                     const Padding(
                       padding: EdgeInsets.only(top: 16),
                       child: Text('Awaiting result...'),
                     )
-                  ],
-                  );
+                  ];
                 }
-                return child;
+                return Column(
+                  children: children,
+                );
               },
             ),
           ),
@@ -106,8 +109,9 @@ class _CustomerTicketListPage extends State<CustomerTicketListPage> {
           child: Icon(Icons.add),
           onPressed: () {
             Navigator.push(
-            context,
-            MaterialPageRoute(builder: (context) => CustomerAddTicket(customer)));
+                context,
+                MaterialPageRoute(
+                    builder: (context) => PilotAddLicense(pilot)));
           },
         ),
       ),
@@ -115,19 +119,21 @@ class _CustomerTicketListPage extends State<CustomerTicketListPage> {
   }
 }
 
-class TicketCard extends StatelessWidget {
-  const TicketCard(this.refreshKey, this.ticket, this.customer, {Key key}) : super(key: key);
+class LicenseCard extends StatelessWidget {
+  const LicenseCard(this.refreshKey, this.license, this.pilot, {Key key})
+      : super(key: key);
 
   final refreshKey;
-  final customer;
-  final ticket;
+  final Pilot pilot;
+  final license;
   static const titleStyle = TextStyle(fontSize: 25);
   static const subtitleStyle = TextStyle(fontSize: 19);
 
+/*
   Color setTicketStatusColor() {
     Color ticketColor;
 
-    switch (ticket.status) {
+    switch (lice.status) {
       case "open": {ticketColor = Colors.green; }
       break;
       case "pending": {ticketColor = Colors.yellow; }
@@ -139,7 +145,7 @@ class TicketCard extends StatelessWidget {
     }
     
     return ticketColor;
-  }
+  }*/
 
   @override
   Widget build(BuildContext context) {
@@ -148,14 +154,16 @@ class TicketCard extends StatelessWidget {
       child: Dismissible(
         key: Key(UniqueKey().toString()),
         onDismissed: (direction) {
-          deleteTicketHandler(ticket.id, customer.id);
+          //deleteRequestHandler(request.id, operator.id);
           refreshKey.currentState.show(atTop: true);
         },
-          child: GestureDetector (
-          onTap: () {Navigator.push(
-                      context,
-                      MaterialPageRoute(builder: (context) => CustomerTicketInfo(customer, ticket)));
-                    },
+        child: GestureDetector(
+          onTap: () {
+            Navigator.push(
+                context,
+                MaterialPageRoute(
+                    builder: (context) => PilotPlaneInfo(pilot, license)));
+          },
           child: Column(
             mainAxisSize: MainAxisSize.min,
             crossAxisAlignment: CrossAxisAlignment.center,
@@ -163,21 +171,21 @@ class TicketCard extends StatelessWidget {
               ListTile(
                 leading: Icon(Icons.bookmark),
                 title: Text(
-                  ticket.title,
+                  license.name,
                   style: titleStyle,
                 ),
                 subtitle: Row(
                   children: <Widget>[
                     Text(
-                      'status: ',
+                      'license type: ',
                       style: subtitleStyle,
                     ),
                     Text(
-                      ticket.status,
-                      style: TextStyle(
-                        color: setTicketStatusColor(),
-                        fontSize: 19,
-                      ),
+                      license.license_type,
+                      /*style: TextStyle(
+                      color: setTicketStatusColor(),
+                      fontSize: 19,
+                    ),*/
                     ),
                   ],
                 ),

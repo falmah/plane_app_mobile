@@ -57,31 +57,7 @@ class _OperatorMainPage extends State<OperatorMainPage> {
                   // Update the state of the app
                   // ...
                   // Then close the drawer
-                  Navigator.pop(context);
-                },
-              ),
-              ListTile(
-                leading: Icon(Icons.airplanemode_active),
-                title: Text('Tickets'),
-                onTap: () {
                   //Navigator.pop(context);
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(builder: (context) => OperatorTicketListPage(operator)));
-                },
-              ),
-              ListTile(
-                leading: Icon(Icons.airplanemode_active),
-                title: Text('Planes'),
-                onTap: () {
-                  Navigator.pop(context);
-                },
-              ),
-              ListTile(
-                leading: Icon(Icons.assignment_ind),
-                title: Text('Requests'),
-                onTap: () {
-                  Navigator.pop(context);
                 },
               ),
               ListTile(
@@ -91,7 +67,6 @@ class _OperatorMainPage extends State<OperatorMainPage> {
                   // Update the state of the app
                   // ...
                   // Then close the drawer
-                  Navigator.pop(context);
                 },
               ),
               ListTile(
@@ -160,7 +135,7 @@ class _OperatorMainPage extends State<OperatorMainPage> {
                                 child: Text("Show Planes", style: TextStyle(fontSize: 20),),
                               ),
                               Expanded(
-                                child: Icon(Icons.announcement, size: 50,),
+                                child: Icon(Icons.airplanemode_active, size: 50,),
                               ),
                             ],
                           ),

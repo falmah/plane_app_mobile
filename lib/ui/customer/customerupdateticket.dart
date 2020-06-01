@@ -3,10 +3,10 @@ import 'package:flutter/material.dart';
 import 'package:plane_app_mobile/model/customer.dart';
 import 'package:intl/intl.dart';
 import 'package:datetime_picker_formfield/datetime_picker_formfield.dart';
+import 'package:plane_app_mobile/model/global.dart';
 import 'package:plane_app_mobile/model/ticket.dart';
 import 'package:plane_app_mobile/network/tickethandler.dart';
 import '../../model/customer.dart';
-import 'cutomerticketlist.dart';
 
 class CustomerUpdateTicket extends StatefulWidget {
 
@@ -22,23 +22,21 @@ class _CustomerUpdateTicket extends State<CustomerUpdateTicket> {
 
   Customer customer;
   Ticket ticket;
-  final dateFormat = DateFormat("y-MM-dd");
+  final dateFormat = DateFormat("yyyy-MM-dd");
   String cargo_type = 'passenger';
 
   final _titleController = TextEditingController();
   final _startController = TextEditingController();
   final _endController = TextEditingController();
-  final _fromController = TextEditingController();
+  String from= airports[0];
   final _commentController = TextEditingController();
-  final _toController = TextEditingController();
+  String _to = airports[0];
   final _priceController = TextEditingController();
 
   _CustomerUpdateTicket(this.customer, this.ticket){
     _titleController.text = ticket.title;
     _startController.text = dateFormat.format(ticket.date_from);
     _endController.text = dateFormat.format(ticket.date_to);
-    _fromController.text = ticket.dest_from.name;
-    _toController.text = ticket.dest_to.name;
     _priceController.text = ticket.price.toString();
     _commentController.text = ticket.ticket_comment;
     cargo_type = ticket.cargo_type;
@@ -53,8 +51,8 @@ class _CustomerUpdateTicket extends State<CustomerUpdateTicket> {
       "title": _titleController.text,
       "date_from": _startController.text,
       "date_to": _endController.text,
-      "dest_from": _fromController.text,
-      "dest_to": _toController.text,
+      "dest_from": from,
+      "dest_to": _to,
       "price": int.parse(_priceController.text),
       "ticket_comment": _commentController.text
     };
@@ -202,16 +200,32 @@ class _CustomerUpdateTicket extends State<CustomerUpdateTicket> {
                   ],
                 ),
                 SizedBox(height: 5.0),
-                TextFormField (
-                  controller: _fromController,
-                  autofocus: false,
-                  //initialValue: 'some password',
-                  obscureText: false,
-                  decoration: InputDecoration(
-                    hintText: 'from',
-                    contentPadding: EdgeInsets.fromLTRB(20.0, 2.0, 20.0, 10.0),
-                    border: OutlineInputBorder(borderRadius: BorderRadius.circular(25.0)),
-                  ),
+                Row(
+                  children: <Widget>[
+                    Container(
+                      width: 400.0,
+                      child: DropdownButtonHideUnderline(
+                        child: DropdownButton<String>(
+                          value: from,
+                          elevation: 16,
+                          underline: Container(
+                            height: 2,
+                          ),
+                          onChanged: (String newValue) {
+                            setState(() {
+                              from = newValue;
+                            });
+                          },
+                          items: airports.map<DropdownMenuItem<String>>((String value) {
+                            return DropdownMenuItem<String>(
+                              value: value,
+                              child: SizedBox( width: 200, child: Text(value, overflow: TextOverflow.ellipsis)),
+                            );
+                          }).toList(),
+                        ),
+                      ),
+                    ),
+                  ],
                 ),
                 SizedBox(height: 22.0),
                 Row(
@@ -220,16 +234,32 @@ class _CustomerUpdateTicket extends State<CustomerUpdateTicket> {
                   ],
                 ),
                 SizedBox(height: 5.0),
-                TextFormField (
-                  controller: _toController,
-                  autofocus: false,
-                  //initialValue: 'some password',
-                  obscureText: false,
-                  decoration: InputDecoration(
-                    hintText: 'to',
-                    contentPadding: EdgeInsets.fromLTRB(20.0, 2.0, 20.0, 10.0),
-                    border: OutlineInputBorder(borderRadius: BorderRadius.circular(25.0)),
-                  ),
+                Row(
+                  children: <Widget>[
+                    Container(
+                      width: 400.0,
+                      child: DropdownButtonHideUnderline(
+                        child: DropdownButton<String>(
+                          value: _to,
+                          elevation: 16,
+                          underline: Container(
+                            height: 2,
+                          ),
+                          onChanged: (String newValue) {
+                            setState(() {
+                              _to = newValue;
+                            });
+                          },
+                          items: airports.map<DropdownMenuItem<String>>((String value) {
+                            return DropdownMenuItem<String>(
+                              value: value,
+                              child: SizedBox( width: 200, child: Text(value, overflow: TextOverflow.ellipsis)),
+                            );
+                          }).toList(),
+                        ),
+                      ),
+                    ),
+                  ],
                 ),
                 SizedBox(height: 22.0),
                 Row(

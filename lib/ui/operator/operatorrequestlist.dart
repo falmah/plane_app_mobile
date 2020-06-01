@@ -21,6 +21,12 @@ class _OperatorRequestListPage extends State<OperatorRequestListPage> {
   List<Request> requestList = [];
 
   @override
+  void initState() {
+    super.initState();
+    refreshKey = GlobalKey<RefreshIndicatorState>();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return MaterialApp(
       title: "mainWidget",

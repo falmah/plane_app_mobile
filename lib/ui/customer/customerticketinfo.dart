@@ -90,13 +90,20 @@ class _CustomerTicketInfo extends State<CustomerTicketInfo> {
                 Row(
                   children: <Widget>[
                     createInfo("From: "),
-                    createInfo(ticket.dest_from.name)
+                    Wrap(
+                      direction: Axis.vertical,
+                        children: <Widget>[ 
+                          createInfo(ticket.dest_from.name),
+                        ]
+                      ),
                   ],
                 ),
                 Row(
                   children: <Widget>[
                     createInfo("To: "),
-                    createInfo(ticket.dest_to.name)
+                    Flexible(
+                      child: createInfo(ticket.dest_to.name),
+                    )
                   ],
                 ),
                 Divider(),

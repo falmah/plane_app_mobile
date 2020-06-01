@@ -4,8 +4,8 @@ part 'city.g.dart';
 
 @JsonSerializable(explicitToJson: true)
 class City {
-	String name;
-	double latitude;
+  String name;
+  double latitude;
   double longitude;
   Country country;
 

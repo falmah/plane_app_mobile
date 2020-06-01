@@ -92,13 +92,13 @@ class _OperatorTicketInfo extends State<OperatorTicketInfo> {
                 Row(
                   children: <Widget>[
                     createInfo("From: "),
-                    createInfo(ticket.dest_from.name)
+                    createInfo(ticket.dest_from.name),
                   ],
                 ),
                 Row(
                   children: <Widget>[
                     createInfo("To: "),
-                    createInfo(ticket.dest_to.name)
+                    createInfo(ticket.dest_to.name),
                   ],
                 ),
                 Divider(),
@@ -115,13 +115,13 @@ class _OperatorTicketInfo extends State<OperatorTicketInfo> {
                 Row(
                   children: <Widget>[
                     createInfo("Name: "),
-                    createInfo(ticket.customer.user.name + " " + ticket.customer.user.name),
+                    createInfo(ticket.customer.user.name + " " + ticket.customer.user.surname),
                   ],
                 ),
                 Row(
                   children: <Widget>[
                     createInfo("email: "),
-                    createInfo(ticket.customer.user.email)
+                    createInfo(ticket.customer.user.email),
                   ],
                 ),
                 Divider(),
@@ -143,10 +143,10 @@ class _OperatorTicketInfo extends State<OperatorTicketInfo> {
                           alignment: Alignment.bottomRight,
                           child: MaterialButton(
                             minWidth: 400,
-                            onPressed: () => {
+                            onPressed: () {
                               Navigator.push(
                                 context,
-                                MaterialPageRoute(builder: (context) => OperatorAddRequest(operator, ticket))),
+                                MaterialPageRoute(builder: (context) => OperatorAddRequest(operator, ticket)));
                             },
                             child: Text('Create request', style: TextStyle(fontSize: 30)),
                           ),

@@ -103,14 +103,6 @@ class _LoginPageState extends State<LoginPage> {
         },
     );
 
-    final forgotLabel = FlatButton(
-      child: Text(
-        'Forgot password?',
-        style: TextStyle(color: Colors.white38),
-      ),
-      onPressed: () {},
-    );
-
     return Scaffold(
       backgroundColor: Colors.grey[850],
       body: Center(
@@ -126,7 +118,6 @@ class _LoginPageState extends State<LoginPage> {
             SizedBox(height: 24.0),
             loginButton,
             registrationLabel,
-            forgotLabel
           ],
         ),
       ),

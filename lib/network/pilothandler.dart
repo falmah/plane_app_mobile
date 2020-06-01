@@ -5,11 +5,10 @@ import 'const.dart';
 import 'package:http/http.dart' as http;
 
 Future<List<Pilot>> getPilots(String id) async {
-
-  String request = 'http://'+ipAddr+':81/operator/pilot/' + id + '/all';
+  String request = 'http://' + ipAddr + ':81/operator/pilot/' + id + '/all';
 
   final http.Response response = await http.get(request);
-  
+
   if (response.statusCode != 404) {
     final parsed = jsonDecode(response.body).cast<Map<String, dynamic>>();
     return parsed.map<Pilot>((json) => Pilot.fromJson(json)).toList();

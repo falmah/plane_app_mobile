@@ -1,23 +1,26 @@
 import 'package:flutter/material.dart';
 import 'package:plane_app_mobile/model/global.dart';
 import 'package:plane_app_mobile/model/operator.dart';
+import 'package:intl/intl.dart';
 import 'package:plane_app_mobile/model/pilot.dart';
 import 'package:plane_app_mobile/model/plane.dart';
 import 'dart:convert';
 import 'package:plane_app_mobile/network/planehandler.dart';
 
-class OperatorAddPlane extends StatefulWidget {
+class OperatorUpdatePlane extends StatefulWidget {
 
   Operator operator;
-  OperatorAddPlane(this.operator);
+  Plane plane;
+  OperatorUpdatePlane(this.operator, this.plane);
 
   @override
-  _OperatorAddPlane createState() => _OperatorAddPlane(operator);
+  _OperatorUpdatePlane createState() => _OperatorUpdatePlane(operator, this.plane);
 }
 
-class _OperatorAddPlane extends State<OperatorAddPlane> {
+class _OperatorUpdatePlane extends State<OperatorUpdatePlane> {
 
   Operator operator;
+  Plane plane;
 
   String plane_type = 'two-engine';
   String airport = airports[0];
@@ -37,8 +40,33 @@ class _OperatorAddPlane extends State<OperatorAddPlane> {
   final _nameController = TextEditingController();
   final _prefixController = TextEditingController();
   final _idController = TextEditingController();
+  final _locationController = TextEditingController();
 
-  _OperatorAddPlane(this.operator);
+  _OperatorUpdatePlane(this.operator, this.plane) {
+    _nameController.text = plane.name;
+    plane_type = plane.plane_type;
+    _prefixController.text = plane.registration_prefix;
+    _idController.text = plane.registration_id;
+    _locationController.text = plane.current_location.name;
+  }
+
+  Future<bool> updatePLane()
+  async {
+    Map<String, dynamic> req = {
+      "name": _nameController.text,
+      "registration_prefix": _prefixController.text,
+      "registration_id": _idController.text,
+      "plane_type": plane_type,
+      "current_location": _locationController.text
+    };
+    print(req.toString());
+
+    var resp = await updatePlaneHandler(json.encode(req), plane.id, operator.id);
+    String st = resp.toString();
+    print(st);
+
+    return true;
+  }
 
   Text createTitle(String str) {
     return Text(str, style: TextStyle(fontSize: 20));
@@ -46,23 +74,6 @@ class _OperatorAddPlane extends State<OperatorAddPlane> {
 
   Text createInfo(String str) {
     return Text(str, style: TextStyle(fontSize: 20));
-  }
-
-  Future<bool> createPlane() async {
-    Map<String, dynamic> req = {
-      "name": _nameController.text,
-      "registration_prefix": _prefixController.text,
-      "registration_id": _idController.text,
-      "plane_type": plane_type,
-      "current_location": airport
-    };
-    print(req.toString());
-
-    var resp = await addPlaneHandler(json.encode(req), operator.id);
-    String st = resp.toString();
-    print(st);
-
-    return true;
   }
 
   @override
@@ -77,7 +88,7 @@ class _OperatorAddPlane extends State<OperatorAddPlane> {
       ),
       home: Scaffold(
         appBar: AppBar(
-          title: Text("Add plane"),
+          title: Text("Update plane"),
           leading: IconButton(
             tooltip: 'Previous choice',
             icon: const Icon(Icons.arrow_back),
@@ -225,10 +236,11 @@ class _OperatorAddPlane extends State<OperatorAddPlane> {
                   child: MaterialButton(
                     minWidth: 400,
                     onPressed: () async {
-                      createPlane();
+                      updatePLane();
+                      Navigator.pop(context);
                       Navigator.pop(context);
                     },
-                    child: Text('Add plane', style: TextStyle(fontSize: 30)),
+                    child: Text('Update plane', style: TextStyle(fontSize: 30)),
                   ),
                 ),
               ),

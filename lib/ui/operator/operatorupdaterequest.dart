@@ -4,24 +4,25 @@ import 'package:plane_app_mobile/model/operator.dart';
 import 'package:intl/intl.dart';
 import 'package:plane_app_mobile/model/pilot.dart';
 import 'package:plane_app_mobile/model/plane.dart';
+import 'package:plane_app_mobile/model/request.dart';
 import 'package:plane_app_mobile/model/ticket.dart';
 import 'package:datetime_picker_formfield/datetime_picker_formfield.dart';
 import 'package:plane_app_mobile/network/requesthandler.dart';
 
-class OperatorAddRequest extends StatefulWidget {
+class OperatorUpdateRequest extends StatefulWidget {
 
   Operator operator;
-  Ticket ticket;
-  OperatorAddRequest(this.operator, this.ticket);
+  Request request;
+  OperatorUpdateRequest(this.operator, this.request);
 
   @override
-  _OperatorAddRequest createState() => _OperatorAddRequest(operator, this.ticket);
+  _OperatorUpdateRequest createState() => _OperatorUpdateRequest(operator, this.request);
 }
 
-class _OperatorAddRequest extends State<OperatorAddRequest> {
+class _OperatorUpdateRequest extends State<OperatorUpdateRequest> {
 
   Operator operator;
-  Ticket ticket;
+  Request request;
 
   final dateFormat = DateFormat("yyyy-MM-dd");
 
@@ -34,25 +35,34 @@ class _OperatorAddRequest extends State<OperatorAddRequest> {
   Future<List<Plane>> planeFuture;
   Future<List<Pilot>> pilotFuture;
 
-  Future<bool> createRequest() async {
+  Future<bool> updateRequest() async {
     Map<String, dynamic> req = {
-      "status" : "open",
+      "status" : request.status,
       "pilot": pilot_name.split(" ")[0],
       "price": int.parse(_priceController.text),
       "required_license": license,
-      "deadline": deadlineController.text, 
       "required_visa": visa,
+      "deadline": deadlineController.text,
       "request_comment": _commentController.text,
-      "ticket_id": ticket.id,
+      "ticket_id": request.ticket.id,
       "plane": plane
     };
     print(req.toString());
 
-    var resp = await addRequestHandler(json.encode(req), operator.id);
+    var resp = await updateRequestHandler(json.encode(req), operator.id, request.id);
     String st = resp.toString();
     print(st);
 
     return true;
+  }
+
+  _OperatorUpdateRequest(this.operator, this.request) {
+    license = request.required_license;
+    visa = request.required_visa;
+    plane = request.plane.name;
+    _priceController.text = request.price.toString();
+    deadlineController.text = dateFormat.format(request.deadline);
+    _commentController.text = request.request_comment;
   }
 
 /*
@@ -66,8 +76,6 @@ class _OperatorAddRequest extends State<OperatorAddRequest> {
   final _priceController = TextEditingController();
   final deadlineController = TextEditingController();
   final _commentController = TextEditingController();
-
-  _OperatorAddRequest(this.operator, this.ticket);
 
   Text createTitle(String str) {
     return Text(str, style: TextStyle(fontSize: 20));
@@ -307,11 +315,11 @@ class _OperatorAddRequest extends State<OperatorAddRequest> {
                   child: MaterialButton(
                     minWidth: 400,
                     onPressed: () {
-                      createRequest();
+                      updateRequest();
                       Navigator.pop(context);
                       Navigator.pop(context);
                     },
-                    child: Text('Create request', style: TextStyle(fontSize: 30)),
+                    child: Text('Update request', style: TextStyle(fontSize: 30)),
                   ),
                 ),
               ),

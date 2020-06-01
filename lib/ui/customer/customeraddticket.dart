@@ -5,10 +5,9 @@ import 'package:intl/intl.dart';
 import 'package:datetime_picker_formfield/datetime_picker_formfield.dart';
 import 'package:plane_app_mobile/network/tickethandler.dart';
 import '../../model/customer.dart';
-import 'cutomerticketlist.dart';
+import 'package:plane_app_mobile/model/global.dart';
 
 class CustomerAddTicket extends StatefulWidget {
-
   Customer customer;
   CustomerAddTicket(this.customer);
 
@@ -17,17 +16,16 @@ class CustomerAddTicket extends StatefulWidget {
 }
 
 class _CustomerAddTicket extends State<CustomerAddTicket> {
-
   Customer customer;
-  final dateFormat = DateFormat("y-MM-dd");
+  final dateFormat = DateFormat("yyyy-MM-dd");
   String cargo_type = 'passenger';
 
   final _titleController = TextEditingController();
   final _startController = TextEditingController();
   final _endController = TextEditingController();
-  final _fromController = TextEditingController();
+  String from = airports[0];
   final _commentController = TextEditingController();
-  final _toController = TextEditingController();
+  String _to = airports[0];
   final _priceController = TextEditingController();
 
   _CustomerAddTicket(this.customer);
@@ -39,8 +37,8 @@ class _CustomerAddTicket extends State<CustomerAddTicket> {
       "title": _titleController.text,
       "date_from": _startController.text,
       "date_to": _endController.text,
-      "dest_from": _fromController.text,
-      "dest_to": _toController.text,
+      "dest_from": from,
+      "dest_to": _to,
       "price": int.parse(_priceController.text),
       "ticket_comment": _commentController.text
     };
@@ -83,11 +81,8 @@ class _CustomerAddTicket extends State<CustomerAddTicket> {
           ),
         ),
         body: SingleChildScrollView(
-          child: Container (
-            height: MediaQuery
-              .of(context)
-              .size
-              .height,
+          child: Container(
+            height: MediaQuery.of(context).size.height,
             child: Padding(
               padding: const EdgeInsets.all(16.0),
               child: Column(
@@ -97,16 +92,20 @@ class _CustomerAddTicket extends State<CustomerAddTicket> {
                       createTitle("Title: "),
                     ],
                   ),
-                  SizedBox(height: 5.0,),
-                  TextFormField (
+                  SizedBox(
+                    height: 5.0,
+                  ),
+                  TextFormField(
                     controller: _titleController,
                     autofocus: false,
                     //initialValue: 'some password',
                     obscureText: false,
                     decoration: InputDecoration(
                       hintText: 'Title',
-                      contentPadding: EdgeInsets.fromLTRB(20.0, 2.0, 20.0, 10.0),
-                      border: OutlineInputBorder(borderRadius: BorderRadius.circular(25.0)),
+                      contentPadding:
+                          EdgeInsets.fromLTRB(20.0, 2.0, 20.0, 10.0),
+                      border: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(25.0)),
                     ),
                   ),
                   SizedBox(height: 22.0),
@@ -115,7 +114,9 @@ class _CustomerAddTicket extends State<CustomerAddTicket> {
                       createTitle("Cargo type: "),
                     ],
                   ),
-                  SizedBox(height: 5.0,),
+                  SizedBox(
+                    height: 5.0,
+                  ),
                   Row(
                     children: <Widget>[
                       Container(
@@ -136,7 +137,9 @@ class _CustomerAddTicket extends State<CustomerAddTicket> {
                                 .map<DropdownMenuItem<String>>((String value) {
                               return DropdownMenuItem<String>(
                                 value: value,
-                                child: Text(value),
+                                child: Text(
+                                  value,
+                                ),
                               );
                             }).toList(),
                           ),
@@ -187,16 +190,36 @@ class _CustomerAddTicket extends State<CustomerAddTicket> {
                     ],
                   ),
                   SizedBox(height: 5.0),
-                  TextFormField (
-                    controller: _fromController,
-                    autofocus: false,
-                    //initialValue: 'some password',
-                    obscureText: false,
-                    decoration: InputDecoration(
-                      hintText: 'from',
-                      contentPadding: EdgeInsets.fromLTRB(20.0, 2.0, 20.0, 10.0),
-                      border: OutlineInputBorder(borderRadius: BorderRadius.circular(25.0)),
-                    ),
+                  Row(
+                    children: <Widget>[
+                      Container(
+                        width: 400.0,
+                        child: DropdownButtonHideUnderline(
+                          child: DropdownButton<String>(
+                            value: from,
+                            elevation: 16,
+                            underline: Container(
+                              height: 2,
+                            ),
+                            onChanged: (String newValue) {
+                              setState(() {
+                                from = newValue;
+                              });
+                            },
+                            items: airports
+                                .map<DropdownMenuItem<String>>((String value) {
+                              return DropdownMenuItem<String>(
+                                value: value,
+                                child: SizedBox(
+                                    width: 200,
+                                    child: Text(value,
+                                        overflow: TextOverflow.ellipsis)),
+                              );
+                            }).toList(),
+                          ),
+                        ),
+                      ),
+                    ],
                   ),
                   SizedBox(height: 22.0),
                   Row(
@@ -205,16 +228,36 @@ class _CustomerAddTicket extends State<CustomerAddTicket> {
                     ],
                   ),
                   SizedBox(height: 5.0),
-                  TextFormField (
-                    controller: _toController,
-                    autofocus: false,
-                    //initialValue: 'some password',
-                    obscureText: false,
-                    decoration: InputDecoration(
-                      hintText: 'to',
-                      contentPadding: EdgeInsets.fromLTRB(20.0, 2.0, 20.0, 10.0),
-                      border: OutlineInputBorder(borderRadius: BorderRadius.circular(25.0)),
-                    ),
+                  Row(
+                    children: <Widget>[
+                      Container(
+                        width: 400.0,
+                        child: DropdownButtonHideUnderline(
+                          child: DropdownButton<String>(
+                            value: _to,
+                            elevation: 16,
+                            underline: Container(
+                              height: 2,
+                            ),
+                            onChanged: (String newValue) {
+                              setState(() {
+                                _to = newValue;
+                              });
+                            },
+                            items: airports
+                                .map<DropdownMenuItem<String>>((String value) {
+                              return DropdownMenuItem<String>(
+                                value: value,
+                                child: SizedBox(
+                                    width: 200,
+                                    child: Text(value,
+                                        overflow: TextOverflow.ellipsis)),
+                              );
+                            }).toList(),
+                          ),
+                        ),
+                      ),
+                    ],
                   ),
                   SizedBox(height: 22.0),
                   Row(
@@ -223,15 +266,17 @@ class _CustomerAddTicket extends State<CustomerAddTicket> {
                     ],
                   ),
                   SizedBox(height: 5.0),
-                  TextFormField (
+                  TextFormField(
                     keyboardType: TextInputType.number,
                     controller: _priceController,
                     autofocus: false,
                     obscureText: false,
                     decoration: InputDecoration(
                       hintText: 'price',
-                      contentPadding: EdgeInsets.fromLTRB(20.0, 2.0, 20.0, 10.0),
-                      border: OutlineInputBorder(borderRadius: BorderRadius.circular(25.0)),
+                      contentPadding:
+                          EdgeInsets.fromLTRB(20.0, 2.0, 20.0, 10.0),
+                      border: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(25.0)),
                     ),
                   ),
                   SizedBox(height: 22.0),
@@ -241,15 +286,17 @@ class _CustomerAddTicket extends State<CustomerAddTicket> {
                     ],
                   ),
                   SizedBox(height: 5.0),
-                  TextFormField (
+                  TextFormField(
                     controller: _commentController,
                     autofocus: false,
                     //initialValue: 'some password',
                     obscureText: false,
                     decoration: InputDecoration(
                       hintText: 'Comment',
-                      contentPadding: EdgeInsets.fromLTRB(20.0, 2.0, 20.0, 10.0),
-                      border: OutlineInputBorder(borderRadius: BorderRadius.circular(25.0)),
+                      contentPadding:
+                          EdgeInsets.fromLTRB(20.0, 2.0, 20.0, 10.0),
+                      border: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(25.0)),
                     ),
                   ),
                   Expanded(
@@ -260,9 +307,9 @@ class _CustomerAddTicket extends State<CustomerAddTicket> {
                         onPressed: () {
                           createTicket();
                           Navigator.pop(context);
-                          Navigator.pop(context);
-                        },  
-                        child: Text('Add ticket', style: TextStyle(fontSize: 30)),
+                        },
+                        child:
+                            Text('Add ticket', style: TextStyle(fontSize: 30)),
                       ),
                     ),
                   ),

@@ -11,23 +11,24 @@ class Ticket {
   String cargo_type;
   DateTime date_from;
   DateTime date_to;
-	String title;
+  String title;
   Airport dest_from;
   Airport dest_to;
-	int price;
+  int price;
   String ticket_comment;
 
-  Ticket(this.id,
-   this.customer, 
-   this.status, 
-   this.cargo_type,
-   this.date_from,
-   this.date_to,
-   this.dest_from,
-   this.dest_to,
-   this.price,
-   this.title,
-   this.ticket_comment);
+  Ticket(
+      this.id,
+      this.customer,
+      this.status,
+      this.cargo_type,
+      this.date_from,
+      this.date_to,
+      this.dest_from,
+      this.dest_to,
+      this.price,
+      this.title,
+      this.ticket_comment);
 
   factory Ticket.fromJson(Map<String, dynamic> json) => _$TicketFromJson(json);
 
