@@ -1,11 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:plane_app_mobile/ui/pilot/pilotlicenselist.dart';
+import 'package:plane_app_mobile/ui/pilot/pilotvisalist.dart';
 import '../../model/pilot.dart';
 import 'pilotrequestlist.dart';
 
 class PilotMainPage extends StatefulWidget {
 
-  Pilot pilot;
+  final Pilot pilot;
   PilotMainPage(this.pilot);
 
   @override
@@ -29,7 +30,7 @@ class _PilotMainPage extends State<PilotMainPage> {
       ),
       home: Scaffold(
         appBar: AppBar(
-          title: Text(pilot.user.name), 
+          title: Text(pilot.user.name),
           //backgroundColor: Colors.grey
           ),
         drawer: Drawer(
@@ -118,9 +119,9 @@ class _PilotMainPage extends State<PilotMainPage> {
                     ),
                     GestureDetector (
                       onTap: () {
-                        //Navigator.push(
-                        //context,
-                        //MaterialPageRoute(builder: (context) => OperatorPlaneListPage(operator)));
+                        Navigator.push(
+                        context,
+                        MaterialPageRoute(builder: (context) => PilotVisaListPage(pilot)));
                       },
                       child: Container(
                         color: Colors.grey[700],

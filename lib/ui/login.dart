@@ -15,25 +15,31 @@ class LoginPage extends StatefulWidget {
 }
 
 class _LoginPageState extends State<LoginPage> {
-
-  void login() async{
-    var resp = await loginHandler(_usernameController.text, _passwordController.text);
+  void login() async {
+    var resp =
+        await loginHandler(_usernameController.text, _passwordController.text);
     switch (resp["user"]["role"] as String) {
-      case "customer": {
-        Customer c = Customer.fromJson(resp);
-        Navigator.push(context,
-                        MaterialPageRoute(builder: (context) => CustomerMainPage(c)));
-      } break;
-      case "operator": {
-        Operator o = Operator.fromJson(resp);
-        Navigator.push(context,
-                        MaterialPageRoute(builder: (context) => OperatorMainPage(o)));
-      } break;
-      case "pilot": {
-        Pilot p = Pilot.fromJson(resp);
-        Navigator.push(context,
-                        MaterialPageRoute(builder: (context) => PilotMainPage(p)));
-      } break;
+      case "customer":
+        {
+          Customer c = Customer.fromJson(resp);
+          Navigator.push(context,
+              MaterialPageRoute(builder: (context) => CustomerMainPage(c)));
+        }
+        break;
+      case "operator":
+        {
+          Operator o = Operator.fromJson(resp);
+          Navigator.push(context,
+              MaterialPageRoute(builder: (context) => OperatorMainPage(o)));
+        }
+        break;
+      case "pilot":
+        {
+          Pilot p = Pilot.fromJson(resp);
+          Navigator.push(context,
+              MaterialPageRoute(builder: (context) => PilotMainPage(p)));
+        }
+        break;
       default:
     }
     print(resp);
@@ -48,8 +54,8 @@ class _LoginPageState extends State<LoginPage> {
       tag: 'hero',
       child: CircleAvatar(
         backgroundColor: Colors.transparent,
-        radius: 48.0,
-        //child: Image.asset('assets/logo.png'),
+        radius: 150.0,
+        child: Image.asset('assets/logo.png'),
       ),
     );
 
@@ -99,8 +105,8 @@ class _LoginPageState extends State<LoginPage> {
       ),
       onPressed: () {
         Navigator.push(context,
-                        MaterialPageRoute(builder: (context) => RegistrationPage()));
-        },
+            MaterialPageRoute(builder: (context) => RegistrationPage()));
+      },
     );
 
     return Scaffold(

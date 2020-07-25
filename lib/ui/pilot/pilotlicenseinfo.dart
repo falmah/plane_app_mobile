@@ -2,31 +2,28 @@ import 'dart:typed_data';
 
 import 'package:flutter/material.dart';
 import 'package:plane_app_mobile/model/license.dart';
-import 'package:plane_app_mobile/model/operator.dart';
 import 'package:plane_app_mobile/model/pilot.dart';
-import 'package:image/image.dart' as Im;
-import 'package:plane_app_mobile/model/plane.dart';
 import 'package:plane_app_mobile/network/const.dart';
 import 'package:plane_app_mobile/network/licensehandler.dart';
 import 'dart:io';
 
-class PilotPlaneInfo extends StatefulWidget {
+class PilotLicenseInfo extends StatefulWidget {
 
-  Pilot pilot;
-  License license;
-  PilotPlaneInfo(this.pilot, this.license);
+  final Pilot pilot;
+  final License license;
+  PilotLicenseInfo(this.pilot, this.license);
 
   @override
-  _PilotPlaneInfo createState() => _PilotPlaneInfo(pilot, license);
+  _PilotLicenseInfo createState() => _PilotLicenseInfo(pilot, license);
 }
 
-class _PilotPlaneInfo extends State<PilotPlaneInfo> {
+class _PilotLicenseInfo extends State<PilotLicenseInfo> {
 
   Pilot pilot;
   License license;
   File img;
 
-  _PilotPlaneInfo(this.pilot, this.license);
+  _PilotLicenseInfo(this.pilot, this.license);
 
   Text createTitle(String str) {
     return Text(str, style: TextStyle(fontSize: 30));

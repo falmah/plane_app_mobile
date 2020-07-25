@@ -1,28 +1,28 @@
 import 'package:flutter/material.dart';
 import 'package:plane_app_mobile/model/pilot.dart';
-import 'package:plane_app_mobile/network/licensehandler.dart';
-import 'package:plane_app_mobile/ui/pilot/pilotaddlicense.dart';
-import 'package:plane_app_mobile/ui/pilot/pilotlicenseinfo.dart';
-import 'package:plane_app_mobile/model/license.dart';
+import 'package:plane_app_mobile/network/visahandler.dart';
+import 'package:plane_app_mobile/ui/pilot/pilotaddvisa.dart';
+import 'package:plane_app_mobile/model/visa.dart';
+import 'package:plane_app_mobile/ui/pilot/pilotvisainfo.dart';
 
-class PilotLicenseListPage extends StatefulWidget {
+class PilotVisaListPage extends StatefulWidget {
   final Pilot pilot;
-  PilotLicenseListPage(this.pilot);
+  PilotVisaListPage(this.pilot);
 
   @override
-  _PilotLicenseListPage createState() => _PilotLicenseListPage(pilot);
+  _PilotVisaListPage createState() => _PilotVisaListPage(pilot);
 }
 
-class _PilotLicenseListPage extends State<PilotLicenseListPage> {
+class _PilotVisaListPage extends State<PilotVisaListPage> {
   Pilot pilot;
   GlobalKey<RefreshIndicatorState> refreshKey;
 
-  _PilotLicenseListPage(this.pilot);
-  List<License> requestList = [];
+  _PilotVisaListPage(this.pilot);
+  List<Visa> requestList = [];
 
   List<Widget> _generateList() {
     return new List<Widget>.generate(requestList.length, (int index) {
-      return LicenseCard(refreshKey, requestList[index], pilot);
+      return VisaCard(refreshKey, requestList[index], pilot);
     });
   }
 
@@ -44,7 +44,7 @@ class _PilotLicenseListPage extends State<PilotLicenseListPage> {
       ),
       home: Scaffold(
         appBar: AppBar(
-          title: Text(pilot.user.name),
+          title: Text("${pilot.user.name}'s visas"),
           leading: IconButton(
             tooltip: 'Previous choice',
             icon: const Icon(Icons.arrow_back),
@@ -56,17 +56,17 @@ class _PilotLicenseListPage extends State<PilotLicenseListPage> {
         body: RefreshIndicator(
           key: refreshKey,
           onRefresh: () async {
-            var tmp = await getPilotLicense(pilot.id);
+            var tmp = await getPilotVisa(pilot.id);
             setState(() {
               requestList = tmp;
             });
           },
           child: Padding(
             padding: const EdgeInsets.all(16.0),
-            child: FutureBuilder<List<License>>(
-              future: getPilotLicense(pilot.id),
+            child: FutureBuilder<List<Visa>>(
+              future: getPilotVisa(pilot.id),
               builder: (BuildContext context,
-                  AsyncSnapshot<List<License>> snapshot) {
+                  AsyncSnapshot<List<Visa>> snapshot) {
                 List<Widget> children;
                 if (snapshot.hasData) {
                   requestList = snapshot.data;
@@ -111,7 +111,7 @@ class _PilotLicenseListPage extends State<PilotLicenseListPage> {
             Navigator.push(
                 context,
                 MaterialPageRoute(
-                    builder: (context) => PilotAddLicense(pilot)));
+                    builder: (context) => PilotAddVisa(pilot)));
           },
         ),
       ),
@@ -119,13 +119,13 @@ class _PilotLicenseListPage extends State<PilotLicenseListPage> {
   }
 }
 
-class LicenseCard extends StatelessWidget {
-  const LicenseCard(this.refreshKey, this.license, this.pilot, {Key key})
+class VisaCard extends StatelessWidget {
+  const VisaCard(this.refreshKey, this.visa, this.pilot, {Key key})
       : super(key: key);
 
   final refreshKey;
   final Pilot pilot;
-  final license;
+  final visa;
   static const titleStyle = TextStyle(fontSize: 25);
   static const subtitleStyle = TextStyle(fontSize: 19);
 
@@ -144,7 +144,7 @@ class LicenseCard extends StatelessWidget {
             Navigator.push(
                 context,
                 MaterialPageRoute(
-                    builder: (context) => PilotLicenseInfo(pilot, license)));
+                    builder: (context) => PilotVisaInfo(pilot, visa)));
           },
           child: Column(
             mainAxisSize: MainAxisSize.min,
@@ -153,17 +153,17 @@ class LicenseCard extends StatelessWidget {
               ListTile(
                 leading: Icon(Icons.bookmark),
                 title: Text(
-                  license.name,
+                  visa.name,
                   style: titleStyle,
                 ),
                 subtitle: Row(
                   children: <Widget>[
                     Text(
-                      'license type: ',
+                      'visa type: ',
                       style: subtitleStyle,
                     ),
                     Text(
-                      license.license_type,
+                      visa.visa_type,
                       /*style: TextStyle(
                       color: setTicketStatusColor(),
                       fontSize: 19,

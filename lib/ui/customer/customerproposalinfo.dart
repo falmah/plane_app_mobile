@@ -85,9 +85,6 @@ class _CustomerProposalInfo extends State<CustomerProposalInfo> {
                   children: <Widget>[
                     createInfo("From: "),
                     Flexible(
-                      child: createInfo(request.ticket.dest_from.city.name + ", "),
-                    ),
-                    Flexible(
                       child: createInfo(request.ticket.dest_from.name),
                     )
                   ],
@@ -95,7 +92,6 @@ class _CustomerProposalInfo extends State<CustomerProposalInfo> {
                 Row(
                   children: <Widget>[
                     createInfo("To: "),
-                    createInfo(request.ticket.dest_to.city.name + ", "),
                     createInfo(request.ticket.dest_to.name),
                   ],
                 ),
